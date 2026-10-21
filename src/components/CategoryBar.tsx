@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { CategoryDialog } from "@/components/CategoryDialog";
+import { categoryColor, UNCATEGORIZED_COLOR } from "@/lib/category-colors";
 
 type Props = {
   selected: string | null;
@@ -14,19 +16,22 @@ const idle =
 const active = "border-indigo-600 bg-indigo-600 text-white";
 
 export function CategoryBar({ selected, total, uncategorized, categories }: Props) {
+  // color가 null인 "전체"는 점 없이 인디고 선택 상태를 쓴다.
   const chips = [
-    { key: null, href: "/dashboard", label: "전체", count: total },
+    { key: null, href: "/dashboard", label: "전체", count: total, color: null },
     ...categories.map((c) => ({
       key: String(c.id),
       href: `/dashboard?category=${c.id}`,
       label: c.name,
       count: c.count,
+      color: categoryColor(c.id),
     })),
     {
       key: "none",
       href: "/dashboard?category=none",
       label: "미분류",
       count: uncategorized,
+      color: UNCATEGORIZED_COLOR,
     },
   ];
 
@@ -39,13 +44,22 @@ export function CategoryBar({ selected, total, uncategorized, categories }: Prop
             key={c.label}
             href={c.href}
             aria-current={isActive ? "true" : undefined}
-            className={`${base} ${isActive ? active : idle}`}
+            className={`${base} ${
+              c.color
+                ? isActive
+                  ? c.color.active
+                  : c.color.chip
+                : isActive
+                  ? active
+                  : idle
+            }`}
           >
             {c.label}
             <span className="ml-1.5 text-xs opacity-70">{c.count}</span>
           </Link>
         );
       })}
+      <CategoryDialog emphasize={categories.length === 0} />
     </div>
   );
 }

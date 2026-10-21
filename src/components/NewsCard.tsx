@@ -1,3 +1,5 @@
+import { categoryColor } from "@/lib/category-colors";
+
 type Props = {
   article: {
     sourceUrl: string;
@@ -6,6 +8,7 @@ type Props = {
     summaryKo: string | null;
     source: string;
     publishedAt: Date;
+    categoryId: number | null;
     categoryName: string | null;
   };
 };
@@ -18,9 +21,7 @@ const dateFormat = new Intl.DateTimeFormat("ko-KR", {
 });
 
 export function NewsCard({ article }: Props) {
-  const badge = article.categoryName
-    ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300"
-    : "bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300";
+  const badge = categoryColor(article.categoryId).badge;
 
   return (
     <article className="flex h-full flex-col rounded-xl border border-neutral-200 bg-white p-5 transition-colors hover:border-neutral-300 dark:border-neutral-800 dark:bg-neutral-900">

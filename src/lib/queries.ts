@@ -1,7 +1,7 @@
 import { desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { articles, categories } from "@/db/schema";
-import type { FeedItem } from "@/lib/rss";
+import type { AnalyzedItem } from "@/lib/import-news";
 
 export type CategoryFilter = number | "none" | null;
 
@@ -51,6 +51,7 @@ export async function getArticles(filter: CategoryFilter, page = 1) {
       publishedAt: articles.publishedAt,
       notionSaved: articles.notionSaved,
       notionPageUrl: articles.notionPageUrl,
+      categoryId: articles.categoryId,
       categoryName: categories.name,
     })
     .from(articles)
@@ -70,9 +71,31 @@ export async function findExistingSourceUrls(urls: string[]) {
   return new Set(rows.map((r) => r.sourceUrl));
 }
 
-// 번역·요약·카테고리는 Claude 분석 단계에서 채우므로 지금은 비워 둔다.
+export async function createCategory(input: {
+  name: string;
+  description: string | null;
+}) {
+  const [row] = await db
+    .insert(categories)
+    .values(input)
+    .returning({ id: categories.id });
+  return row.id;
+}
+
+// Claude 분석 단계에서 나온 번역·요약·카테고리를 함께 저장한다.
+export async function listCategories() {
+  return db
+    .select({
+      id: categories.id,
+      name: categories.name,
+      description: categories.description,
+    })
+    .from(categories)
+    .orderBy(categories.id);
+}
+
 // 동시에 들어온 중복은 source_url unique로 걸러지며, 실제로 저장된 건수를 반환한다.
-export async function insertArticles(items: FeedItem[]) {
+export async function insertArticles(items: AnalyzedItem[]) {
   if (items.length === 0) return 0;
   const rows = await db
     .insert(articles)
@@ -80,6 +103,9 @@ export async function insertArticles(items: FeedItem[]) {
       items.map((i) => ({
         sourceUrl: i.sourceUrl,
         originalTitle: i.originalTitle,
+        titleKo: i.titleKo,
+        summaryKo: i.summaryKo,
+        categoryId: i.categoryId,
         source: i.source,
         publishedAt: i.publishedAt,
       })),

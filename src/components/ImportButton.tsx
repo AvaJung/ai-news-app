@@ -8,8 +8,9 @@ import {
 
 function message(r: ImportActionResult) {
   if (!r.ok) return r.error;
-  const { inserted, skipped, feedErrors } = r.result;
+  const { inserted, skipped, feedErrors, failed } = r.result;
   const parts = [`${inserted}건 저장`, `${skipped}건 중복`];
+  if (failed.length > 0) parts.push(`분석 실패 ${failed.length}건`);
   if (feedErrors.length > 0) {
     parts.push(`피드 실패: ${feedErrors.map((e) => e.source).join(", ")}`);
   }
@@ -20,7 +21,11 @@ export function ImportButton() {
   const [pending, startTransition] = useTransition();
   const [result, setResult] = useState<ImportActionResult | null>(null);
 
-  const failed = result !== null && (!result.ok || result.result.feedErrors.length > 0);
+  const failed =
+    result !== null &&
+    (!result.ok ||
+      result.result.feedErrors.length > 0 ||
+      result.result.failed.length > 0);
 
   return (
     <div className="flex items-center gap-3">
