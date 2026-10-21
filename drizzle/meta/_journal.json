@@ -8,6 +8,13 @@
       "when": 1792075068725,
       "tag": "0000_bumpy_liz_osborn",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792569398515,
+      "tag": "0001_smiling_skullbuster",
+      "breakpoints": true
     }
   ]
 }

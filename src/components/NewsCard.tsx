@@ -2,8 +2,8 @@ type Props = {
   article: {
     sourceUrl: string;
     originalTitle: string;
-    titleKo: string;
-    summaryKo: string;
+    titleKo: string | null;
+    summaryKo: string | null;
     source: string;
     publishedAt: Date;
     categoryName: string | null;
@@ -33,11 +33,13 @@ export function NewsCard({ article }: Props) {
         </span>
       </div>
       <h2 className="mt-3 line-clamp-2 text-base font-semibold leading-snug text-neutral-800 dark:text-neutral-200">
-        {article.titleKo}
+        {article.titleKo ?? article.originalTitle}
       </h2>
-      <p className="mt-2 line-clamp-4 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
-        {article.summaryKo}
-      </p>
+      {article.summaryKo && (
+        <p className="mt-2 line-clamp-4 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+          {article.summaryKo}
+        </p>
+      )}
       <div className="mt-auto flex items-center justify-between border-t border-neutral-200 pt-4 dark:border-neutral-800">
         <a
           href={article.sourceUrl}

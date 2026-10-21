@@ -20,8 +20,9 @@ export const articles = pgTable(
     id: serial("id").primaryKey(),
     sourceUrl: text("source_url").notNull().unique(),
     originalTitle: text("original_title").notNull(),
-    titleKo: text("title_ko").notNull(),
-    summaryKo: text("summary_ko").notNull(),
+    // Claude 분석 전에는 null이다.
+    titleKo: text("title_ko"),
+    summaryKo: text("summary_ko"),
     source: text("source").$type<"TechCrunch" | "The Verge">().notNull(),
     publishedAt: timestamp("published_at", { withTimezone: true }).notNull(),
     // null이면 미분류. 카테고리를 삭제하면 null이 된다.
