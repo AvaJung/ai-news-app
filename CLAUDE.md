@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 프로젝트 상태
 
-`PRD.md`가 기준 문서다. 해외 AI 뉴스를 RSS로 수집해 Claude가 한국어로 번역·요약·분류하고, 마음에 드는 기사를 Notion에 저장하는 1인용 웹 앱이다. **앱 코드는 아직 없다.** create-next-app 템플릿과 PRD 기술 스택 패키지(Clerk, Neon + Drizzle, `@anthropic-ai/sdk`, Notion MCP 서버 + `@modelcontextprotocol/sdk`, `rss-parser`, `zod`, `vitest`, `drizzle-kit`)만 설치되어 있다. 구현 전에 PRD를 먼저 읽을 것. 14절에 미결정 사항(Notion DB 속성, 진행 표시 방식, 기본 카테고리 시드, 배포 방식, 소셜 로그인 제공자)이 있다.
+`PRD.md`가 기준 문서다. 해외 AI 뉴스를 RSS로 수집해 Claude가 한국어로 번역·요약·분류하고, 마음에 드는 기사를 Notion에 저장하는 1인용 웹 앱이다. **앱 코드는 아직 없다.** create-next-app 템플릿과 PRD 기술 스택 패키지(Clerk, Neon + Drizzle, `@anthropic-ai/sdk`, Notion MCP 서버 + `@modelcontextprotocol/sdk`, `rss-parser`, `zod`, `vitest`, `drizzle-kit`)만 설치되어 있다. 구현 전에 PRD를 먼저 읽을 것. 화면과 스타일(Tailwind) 작업은 `ui.md`의 UI 가이드를 따른다. 14절에 미결정 사항(Notion DB 속성, 진행 표시 방식, 기본 카테고리 시드, 배포 방식, 소셜 로그인 제공자)이 있다.
 
 ## 명령어
 
