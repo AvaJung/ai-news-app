@@ -1,6 +1,6 @@
 import { NewsCard } from "./NewsCard";
 
-type Article = Parameters<typeof NewsCard>[0]["article"] & { id: number };
+type Article = Parameters<typeof NewsCard>[0]["article"];
 
 export function NewsGrid({ articles }: { articles: Article[] }) {
   if (articles.length === 0) {

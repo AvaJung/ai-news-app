@@ -114,3 +114,29 @@ export async function insertArticles(items: AnalyzedItem[]) {
     .returning({ id: articles.id });
   return rows.length;
 }
+
+export async function getArticleForNotion(id: number) {
+  const [row] = await db
+    .select({
+      sourceUrl: articles.sourceUrl,
+      originalTitle: articles.originalTitle,
+      titleKo: articles.titleKo,
+      summaryKo: articles.summaryKo,
+      source: articles.source,
+      publishedAt: articles.publishedAt,
+      categoryName: categories.name,
+      notionSaved: articles.notionSaved,
+      notionPageUrl: articles.notionPageUrl,
+    })
+    .from(articles)
+    .leftJoin(categories, eq(articles.categoryId, categories.id))
+    .where(eq(articles.id, id));
+  return row ?? null;
+}
+
+export async function markNotionSaved(id: number, pageUrl: string) {
+  await db
+    .update(articles)
+    .set({ notionSaved: true, notionPageUrl: pageUrl })
+    .where(eq(articles.id, id));
+}

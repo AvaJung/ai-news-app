@@ -1,7 +1,9 @@
+import { NotionSaveButton } from "@/components/NotionSaveButton";
 import { categoryColor } from "@/lib/category-colors";
 
 type Props = {
   article: {
+    id: number;
     sourceUrl: string;
     originalTitle: string;
     titleKo: string | null;
@@ -10,6 +12,8 @@ type Props = {
     publishedAt: Date;
     categoryId: number | null;
     categoryName: string | null;
+    notionSaved: boolean;
+    notionPageUrl: string | null;
   };
 };
 
@@ -51,6 +55,11 @@ export function NewsCard({ article }: Props) {
         >
           원문 보기 ↗
         </a>
+        <NotionSaveButton
+          articleId={article.id}
+          saved={article.notionSaved}
+          pageUrl={article.notionPageUrl}
+        />
       </div>
     </article>
   );
