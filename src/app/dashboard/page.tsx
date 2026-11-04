@@ -4,6 +4,7 @@ import { CategoryBar } from "@/components/CategoryBar";
 import { ImportButton } from "@/components/ImportButton";
 import { NewsCountBadge } from "@/components/NewsCountBadge";
 import { NewsGrid } from "@/components/NewsGrid";
+import { NewsGridSkeleton } from "@/components/NewsGridSkeleton";
 import { Pagination } from "@/components/Pagination";
 import { SearchForm } from "@/components/SearchForm";
 import { requireUser } from "@/lib/auth";
@@ -93,13 +94,7 @@ export default function DashboardPage(props: PageProps<"/dashboard">) {
         </div>
       </header>
       <div className="mt-6">
-        <Suspense
-          fallback={
-            <p className="py-16 text-center text-sm text-neutral-500 dark:text-neutral-400">
-              불러오는 중…
-            </p>
-          }
-        >
+        <Suspense fallback={<NewsGridSkeleton />}>
           <DashboardContent searchParams={props.searchParams} />
         </Suspense>
       </div>
