@@ -6,6 +6,8 @@ type Props = {
   totalPages: number;
   // 현재 선택된 카테고리 쿼리 값(없으면 null). 페이지를 넘겨도 유지한다.
   category: string | null;
+  // 현재 검색어(없으면 빈 문자열). 페이지를 넘겨도 유지한다.
+  query?: string;
 };
 
 const item =
@@ -16,15 +18,16 @@ const active = "border-indigo-600 bg-indigo-600 text-white";
 const disabled =
   "pointer-events-none border-neutral-200 text-neutral-300 dark:border-neutral-800 dark:text-neutral-600";
 
-function href(page: number, category: string | null) {
+function href(page: number, category: string | null, query: string) {
   const params = new URLSearchParams();
+  if (query) params.set("q", query);
   if (category) params.set("category", category);
   if (page > 1) params.set("page", String(page));
   const qs = params.toString();
   return qs ? `/dashboard?${qs}` : "/dashboard";
 }
 
-export function Pagination({ page, totalPages, category }: Props) {
+export function Pagination({ page, totalPages, category, query = "" }: Props) {
   if (totalPages <= 1) return null;
 
   const atFirst = page === 1;
@@ -32,7 +35,7 @@ export function Pagination({ page, totalPages, category }: Props) {
 
   const step = (label: string, target: number, isDisabled: boolean) => (
     <Link
-      href={href(target, category)}
+      href={href(target, category, query)}
       aria-disabled={isDisabled}
       tabIndex={isDisabled ? -1 : undefined}
       className={`${item} ${isDisabled ? disabled : idle}`}
@@ -57,7 +60,7 @@ export function Pagination({ page, totalPages, category }: Props) {
         ) : (
           <Link
             key={p}
-            href={href(p, category)}
+            href={href(p, category, query)}
             aria-current={p === page ? "page" : undefined}
             className={`${item} ${p === page ? active : idle}`}
           >

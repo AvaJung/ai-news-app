@@ -1,7 +1,18 @@
-import { desc, eq, inArray, isNull, sql } from "drizzle-orm";
+import {
+  and,
+  desc,
+  eq,
+  ilike,
+  inArray,
+  isNull,
+  or,
+  sql,
+  type SQL,
+} from "drizzle-orm";
 import { db } from "@/db";
 import { articles, categories } from "@/db/schema";
 import type { AnalyzedItem } from "@/lib/import-news";
+import { escapeLike } from "@/lib/search";
 
 export type CategoryFilter = number | "none" | null;
 
@@ -31,14 +42,39 @@ export async function getTotals() {
 
 export const PAGE_SIZE = 9;
 
+// 카테고리 필터와 키워드 검색(한국어 제목·원문 제목·요약, 대소문자 무시)을 합친 조건.
+function buildWhere(filter: CategoryFilter, query: string): SQL | undefined {
+  const conditions: (SQL | undefined)[] = [];
+  if (filter === "none") conditions.push(isNull(articles.categoryId));
+  else if (filter !== null) conditions.push(eq(articles.categoryId, filter));
+  if (query) {
+    const pattern = `%${escapeLike(query)}%`;
+    conditions.push(
+      or(
+        ilike(articles.titleKo, pattern),
+        ilike(articles.originalTitle, pattern),
+        ilike(articles.summaryKo, pattern),
+      ),
+    );
+  }
+  return and(...conditions);
+}
+
+export async function countArticles(filter: CategoryFilter, query = "") {
+  const [row] = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(articles)
+    .where(buildWhere(filter, query));
+  return row.count;
+}
+
 // page는 1부터 시작한다. 발행일이 같은 기사의 순서가 페이지 사이에서 흔들리지 않도록 id를 보조 정렬 키로 쓴다.
-export async function getArticles(filter: CategoryFilter, page = 1) {
-  const where =
-    filter === null
-      ? undefined
-      : filter === "none"
-        ? isNull(articles.categoryId)
-        : eq(articles.categoryId, filter);
+export async function getArticles(
+  filter: CategoryFilter,
+  page = 1,
+  query = "",
+) {
+  const where = buildWhere(filter, query);
 
   return db
     .select({

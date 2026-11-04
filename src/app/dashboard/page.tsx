@@ -4,9 +4,12 @@ import { CategoryBar } from "@/components/CategoryBar";
 import { ImportButton } from "@/components/ImportButton";
 import { NewsGrid } from "@/components/NewsGrid";
 import { Pagination } from "@/components/Pagination";
+import { SearchForm } from "@/components/SearchForm";
 import { requireUser } from "@/lib/auth";
+import { normalizeQuery } from "@/lib/search";
 import {
   PAGE_SIZE,
+  countArticles,
   getArticles,
   getCategoriesWithCounts,
   getTotals,
@@ -21,7 +24,8 @@ async function DashboardContent({
   searchParams: PageProps<"/dashboard">["searchParams"];
 }) {
   await requireUser();
-  const { category, page: pageParam } = await searchParams;
+  const { category, page: pageParam, q } = await searchParams;
+  const query = normalizeQuery(q);
   const raw = Array.isArray(category) ? category[0] : category;
 
   const categories = await getCategoriesWithCounts();
@@ -37,33 +41,37 @@ async function DashboardContent({
 
   const totals = await getTotals();
 
-  // 선택한 필터에 해당하는 기사 수로 전체 페이지 수를 구하고, 범위를 벗어난 page는 보정한다.
-  const filteredCount =
-    filter === null
-      ? totals.total
-      : filter === "none"
-        ? totals.uncategorized
-        : (categories.find((c) => c.id === filter)?.count ?? 0);
+  // 카테고리 필터와 검색어에 해당하는 기사 수로 전체 페이지 수를 구하고, 범위를 벗어난 page는 보정한다.
+  const filteredCount = await countArticles(filter, query);
   const totalPages = Math.max(1, Math.ceil(filteredCount / PAGE_SIZE));
   const rawPage = Number(Array.isArray(pageParam) ? pageParam[0] : pageParam);
   const page = Number.isInteger(rawPage)
     ? Math.min(Math.max(rawPage, 1), totalPages)
     : 1;
 
-  const articles = await getArticles(filter, page);
+  const articles = await getArticles(filter, page, query);
 
   return (
     <>
-      <CategoryBar
-        selected={selected}
-        total={totals.total}
-        uncategorized={totals.uncategorized}
-        categories={categories}
-      />
-      <div className="mt-6">
-        <NewsGrid articles={articles} />
+      <SearchForm query={query} category={selected} />
+      <div className="mt-4">
+        <CategoryBar
+          selected={selected}
+          total={totals.total}
+          uncategorized={totals.uncategorized}
+          categories={categories}
+          query={query}
+        />
       </div>
-      <Pagination page={page} totalPages={totalPages} category={selected} />
+      <div className="mt-6">
+        <NewsGrid articles={articles} query={query} />
+      </div>
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        category={selected}
+        query={query}
+      />
     </>
   );
 }

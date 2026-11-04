@@ -7,6 +7,8 @@ type Props = {
   total: number;
   uncategorized: number;
   categories: { id: number; name: string; count: number }[];
+  // 검색어가 있으면 카테고리를 바꿔도 유지한다.
+  query?: string;
 };
 
 const base =
@@ -15,20 +17,35 @@ const idle =
   "border-neutral-200 text-neutral-600 hover:bg-neutral-100 dark:border-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-800";
 const active = "border-indigo-600 bg-indigo-600 text-white";
 
-export function CategoryBar({ selected, total, uncategorized, categories }: Props) {
+export function CategoryBar({
+  selected,
+  total,
+  uncategorized,
+  categories,
+  query = "",
+}: Props) {
+  const q = query ? `q=${encodeURIComponent(query)}` : "";
+  const withQ = (path: string, hasParams: boolean) =>
+    q ? `${path}${hasParams ? "&" : "?"}${q}` : path;
   // color가 null인 "전체"는 점 없이 인디고 선택 상태를 쓴다.
   const chips = [
-    { key: null, href: "/dashboard", label: "전체", count: total, color: null },
+    {
+      key: null,
+      href: withQ("/dashboard", false),
+      label: "전체",
+      count: total,
+      color: null,
+    },
     ...categories.map((c) => ({
       key: String(c.id),
-      href: `/dashboard?category=${c.id}`,
+      href: withQ(`/dashboard?category=${c.id}`, true),
       label: c.name,
       count: c.count,
       color: categoryColor(c.id),
     })),
     {
       key: "none",
-      href: "/dashboard?category=none",
+      href: withQ("/dashboard?category=none", true),
       label: "미분류",
       count: uncategorized,
       color: UNCATEGORIZED_COLOR,

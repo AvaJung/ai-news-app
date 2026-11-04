@@ -2,11 +2,19 @@ import { NewsCard } from "./NewsCard";
 
 type Article = Parameters<typeof NewsCard>[0]["article"];
 
-export function NewsGrid({ articles }: { articles: Article[] }) {
+export function NewsGrid({
+  articles,
+  query = "",
+}: {
+  articles: Article[];
+  query?: string;
+}) {
   if (articles.length === 0) {
     return (
       <p className="py-16 text-center text-sm text-neutral-500 dark:text-neutral-400">
-        아직 가져온 뉴스가 없어요. 위의 ‘뉴스 가져오기’를 눌러 보세요.
+        {query
+          ? `‘${query}’에 해당하는 뉴스가 없어요.`
+          : "아직 가져온 뉴스가 없어요. 위의 ‘뉴스 가져오기’를 눌러 보세요."}
       </p>
     );
   }
