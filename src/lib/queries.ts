@@ -176,3 +176,12 @@ export async function markNotionSaved(id: number, pageUrl: string) {
     .set({ notionSaved: true, notionPageUrl: pageUrl })
     .where(eq(articles.id, id));
 }
+
+export async function deleteArticle(id: number) {
+  try {
+    await db.delete(articles).where(eq(articles.id, id));
+  } catch (e) {
+    console.error("deleteArticle failed", e);
+    throw e; // 호출부(Server Action)가 사용자용 오류로 변환한다.
+  }
+}

@@ -1,3 +1,4 @@
+import { DeleteButton } from "@/components/DeleteButton";
 import { NotionSaveButton } from "@/components/NotionSaveButton";
 import { categoryColor } from "@/lib/category-colors";
 
@@ -28,8 +29,9 @@ export function NewsCard({ article }: Props) {
   const badge = categoryColor(article.categoryId).badge;
 
   return (
-    <article className="flex h-full flex-col rounded-xl border border-neutral-200 bg-white p-5 transition-colors hover:border-neutral-300 dark:border-neutral-800 dark:bg-neutral-900">
-      <div className="flex items-center justify-between gap-3">
+    <article className="relative flex h-full flex-col rounded-xl border border-neutral-200 bg-white p-5 transition-colors hover:border-neutral-300 dark:border-neutral-800 dark:bg-neutral-900">
+      <DeleteButton articleId={article.id} />
+      <div className="flex items-center justify-between gap-3 pr-7">
         <span className={`rounded-full px-2.5 py-0.5 text-xs ${badge}`}>
           {article.categoryName ?? "미분류"}
         </span>

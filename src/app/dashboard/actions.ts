@@ -11,6 +11,7 @@ import { analyzeArticle } from "@/lib/claude";
 import { importNews, type ImportResult } from "@/lib/import-news";
 import {
   createCategory,
+  deleteArticle,
   findExistingSourceUrls,
   getArticleForNotion,
   insertArticles,
@@ -98,5 +99,29 @@ export async function saveToNotionAction(
   } catch (e) {
     console.error("saveToNotionAction failed", e);
     return { ok: false, error: "Notion에 저장하지 못했습니다." };
+  }
+}
+
+export type DeleteArticleResult =
+  | { ok: true }
+  | { ok: false; status: 400 | 403 | 500; error: string };
+
+export async function deleteArticleAction(
+  articleId: number,
+): Promise<DeleteArticleResult> {
+  if (!(await getAllowedUserId())) {
+    return { ok: false, status: 403, error: "권한이 없습니다." };
+  }
+  if (!Number.isInteger(articleId)) {
+    return { ok: false, status: 400, error: "잘못된 요청입니다." };
+  }
+
+  try {
+    await deleteArticle(articleId);
+    revalidatePath("/dashboard");
+    return { ok: true };
+  } catch (e) {
+    console.error("deleteArticleAction failed", e);
+    return { ok: false, status: 500, error: "기사를 삭제하지 못했습니다." };
   }
 }
