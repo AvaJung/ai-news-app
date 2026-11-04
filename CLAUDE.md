@@ -19,6 +19,11 @@ npx drizzle-kit generate     # 스키마로 SQL 마이그레이션 생성
 npx drizzle-kit migrate      # DATABASE_URL에 마이그레이션 적용
 ```
 
+## 슬래시 명령 (`.claude/commands/`)
+
+- `/check`: 타입 검사, lint, 테스트를 차례로 실행하고 통과/실패를 요약한다. 코드는 수정하지 않는다.
+- `/news-workflow [브랜치 이름]`: 새 기능 개발 워크플로우. main 확인 → 새 브랜치 생성(이름이 없으면 기능을 물어보고 영어 소문자-하이픈 이름을 제안) → 개발 → "완료"/"done" 입력 시 변경 파일 목록과 커밋 메시지 제안 → 확인 후 커밋하고 main에 병합 → 작업 요약. 새 기능을 시작할 때 사용한다.
+
 ## Next.js 16 특이사항 (알고 있던 Next.js와 다르다)
 
 - `AGENTS.md`는 코드를 쓰기 전에 `node_modules/next/dist/docs/`의 번들 문서를 읽도록 요구한다. Middleware는 이제 **`src/proxy.ts`**다(`proxy` 또는 default export).
