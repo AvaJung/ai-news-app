@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { UserButton } from "@clerk/nextjs";
 import { CategoryBar } from "@/components/CategoryBar";
 import { ImportButton } from "@/components/ImportButton";
+import { NewsCountBadge } from "@/components/NewsCountBadge";
 import { NewsGrid } from "@/components/NewsGrid";
 import { Pagination } from "@/components/Pagination";
 import { SearchForm } from "@/components/SearchForm";
@@ -53,7 +54,10 @@ async function DashboardContent({
 
   return (
     <>
-      <SearchForm query={query} category={selected} />
+      <NewsCountBadge total={totals.total} />
+      <div className="mt-4">
+        <SearchForm query={query} category={selected} />
+      </div>
       <div className="mt-4">
         <CategoryBar
           selected={selected}
