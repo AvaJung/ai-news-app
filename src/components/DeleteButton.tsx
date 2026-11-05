@@ -24,7 +24,7 @@ export function DeleteButton({ articleId }: { articleId: number }) {
         disabled={pending}
         aria-label="기사 삭제"
         title="삭제"
-        className="absolute top-3 right-3 flex size-7 items-center justify-center rounded-full text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:outline-none disabled:opacity-50 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
+        className="absolute top-3 right-3 z-10 flex size-7 transition-opacity [@media(hover:hover)]:opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:opacity-100 items-center justify-center rounded-full text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:outline-none disabled:opacity-50 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
       >
         <svg
           viewBox="0 0 16 16"
