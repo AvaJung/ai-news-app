@@ -7,6 +7,7 @@ import { NewsGrid } from "@/components/NewsGrid";
 import { NewsGridSkeleton } from "@/components/NewsGridSkeleton";
 import { Pagination } from "@/components/Pagination";
 import { SearchForm } from "@/components/SearchForm";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { requireUser } from "@/lib/auth";
 import { normalizeQuery } from "@/lib/search";
 import {
@@ -91,6 +92,7 @@ export default function DashboardPage(props: PageProps<"/dashboard">) {
           <Suspense>
             <UserButton />
           </Suspense>
+          <ThemeToggle />
         </div>
       </header>
       <div className="mt-6">

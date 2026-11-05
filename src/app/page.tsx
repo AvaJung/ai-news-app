@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import { SignInButton } from "@clerk/nextjs";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 async function Gate() {
   const { userId } = await auth();
@@ -24,7 +25,8 @@ async function Gate() {
 
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-6 p-8 font-sans">
+    <main className="relative flex flex-1 flex-col items-center justify-center gap-6 p-8 font-sans">
+      <ThemeToggle className="absolute top-4 right-4 sm:right-6" />
       <Suspense>
         <Gate />
       </Suspense>
