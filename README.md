@@ -99,3 +99,8 @@ src/
 
 - Notion 저장은 MCP 서버를 자식 프로세스로 실행하는 방식이라 서버리스 환경(예: Vercel)에서는 불안정할 수 있습니다. 배포 방식을 정하면 `src/lib/notion.ts`만 교체하면 됩니다.
 - 요구사항은 [`PRD.md`](./PRD.md), 화면과 스타일 기준은 [`ui.md`](./ui.md)를 따릅니다.
+
+## 사용한 플러그인
+
+- Frontend Design: UI 디자인 품질 향상
+- commit-commands: 깃 워크플로 자동화
