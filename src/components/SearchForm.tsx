@@ -30,14 +30,14 @@ export function SearchForm({ query, category }: Props) {
       />
       <button
         type="submit"
-        className="h-10 shrink-0 rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+        className="h-10 shrink-0 rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:outline-none dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:ring-offset-neutral-950"
       >
         검색
       </button>
       {query && (
         <Link
           href={clearHref}
-          className="shrink-0 rounded-lg px-2 py-2 text-sm text-neutral-500 hover:text-indigo-600 dark:text-neutral-400"
+          className="shrink-0 rounded-lg px-2 py-2 text-sm text-neutral-500 hover:text-indigo-600 dark:text-neutral-400 dark:hover:text-indigo-400"
         >
           초기화
         </Link>

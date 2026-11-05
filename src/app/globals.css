@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
+/* dark: 변형을 시스템 설정 대신 <html>의 .dark 클래스로 켠다(ThemeToggle이 전환). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -12,11 +16,11 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* 초기값은 layout.tsx의 인라인 스크립트가 저장된 선택 또는 시스템 설정으로 정한다. */
+:root.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  color-scheme: dark;
 }
 
 body {
